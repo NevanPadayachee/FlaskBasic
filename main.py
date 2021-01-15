@@ -6,7 +6,7 @@ a=False
 
 @app.route("/") #when app is run it will run idex
 def index():
-    return render_template("index.html", content=["nev", "kev", "steve"])
+    return render_template("index.html", content="Testing")
 
 #@app.route("/<name>")
 #def user(name):
@@ -18,4 +18,4 @@ def index():
 #        return redirect(url_for("index"))
 
 if __name__=="__main__":
-    app.run()
+    app.run(debug=True)
