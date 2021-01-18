@@ -31,6 +31,16 @@ def login():
         session.permanent = True
         user = request.form["nm"]
         session["user"] = user
+
+        found_user = users.query.filter_by(name=user).first()
+        if found_user:
+            session["email"] = found_user.email
+
+        else:
+            usr = users(user, "")
+            db.session.add(usr)
+            db.session.commit()
+
         flash("Log in Successful")
         return redirect(url_for("user"))
     else:
@@ -44,9 +54,14 @@ def user():
     email = None
     if "user" in session:
         user = session["user"]
-        if request.method=="POST":
+        if request.method == "POST":
             email= request.form["email"]
-            session["email"]=email
+            session["email"] = email
+            found_user = users.query.filter_by(name=user).first()#.delete() to delete found user
+            # for user in found_user:
+                #user.delete()
+            found_user.email = email
+            db.session.commit()
             flash("Email was saved")
         else:
             if "email" in session:
@@ -55,6 +70,11 @@ def user():
     else :
         flash("You are not logged in")
         return redirect(url_for("login"))
+
+
+@app.route("/view")
+def view():
+    return render_template("view.html", values=users.query.all())
 
 @app.route("/logout")
 def logout():
