@@ -22,6 +22,7 @@ class users(db.Model):
         self.email=email
 
 @app.route("/") #when app is run it will run idex
+@app.route("/home")
 def index():
     return render_template("index.html")
 
